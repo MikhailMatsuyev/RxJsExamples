@@ -5,15 +5,26 @@ Detected language : English
 // Example of zip
 const zFirst = of(1, 2, 3);
 const zSecond = of(4, 5, 6);
-const zResult = zip(first, second);
+const zResult = zip(zFirst, zSecond);
 zResult.subscribe(val => console.log(val));
 // Output: [1, 4], [2, 5], [3, 6]
 
 // Example of forkJoin
 const fFirst = of(1, 2, 3);
 const fSecond = of(4, 5, 6);
-const fResult = forkJoin(first, second);
+const fResult = forkJoin(fFirst, fSecond);
 fResult.subscribe(val => console.log(val));
 // Output: [3, 6]
+
+const fFirst = of(1, 2, 3);
+const fSecond = of(4, 5, 6);
+const fResult = combineLatest([fFirst, fSecond]);
+fResult.subscribe(val => console.log(val));
+// Output: 
+[3, 4]
+[3, 5]
+[3, 6]
+
+
 
 https://medium.com/@dannynoo/the-difference-between-rxjs-operators-zip-and-forkjoin-60867f66dcd8
