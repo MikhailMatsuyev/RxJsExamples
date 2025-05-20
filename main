@@ -3,15 +3,15 @@
 Detected language : English
 
 // Example of zip
-const first = of(1, 2, 3);
-const second = of(4, 5, 6);
-const zipResult = zip(first, second);
-zipResult.subscribe(val => console.log(val));
+const zFirst = of(1, 2, 3);
+const zSecond = of(4, 5, 6);
+const zResult = zip(first, second);
+zResult.subscribe(val => console.log(val));
 // Output: [1, 4], [2, 5], [3, 6]
 
 // Example of forkJoin
-const first = of(1, 2, 3);
-const second = of(4, 5, 6);
-const forkJoinResult = forkJoin(first, second);
-forkJoinResult.subscribe(val => console.log(val));
+const fFirst = of(1, 2, 3);
+const fSecond = of(4, 5, 6);
+const fResult = forkJoin(first, second);
+fResult.subscribe(val => console.log(val));
 // Output: [3, 6]
