@@ -15,3 +15,5 @@ const fSecond = of(4, 5, 6);
 const fResult = forkJoin(first, second);
 fResult.subscribe(val => console.log(val));
 // Output: [3, 6]
+
+https://medium.com/@dannynoo/the-difference-between-rxjs-operators-zip-and-forkjoin-60867f66dcd8
