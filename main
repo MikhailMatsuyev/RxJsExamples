@@ -1,0 +1,17 @@
+Основное различие между Zip и Forkjoin состоит в том, что ZIP на постоянной основе ОБЪЕДИНЯЕТ значения, 
+а как Forkjoin издает значения только после того, как все наблюдаемые входные данные были завершены.
+Detected language : English
+
+// Example of zip
+const first = of(1, 2, 3);
+const second = of(4, 5, 6);
+const zipResult = zip(first, second);
+zipResult.subscribe(val => console.log(val));
+// Output: [1, 4], [2, 5], [3, 6]
+
+// Example of forkJoin
+const first = of(1, 2, 3);
+const second = of(4, 5, 6);
+const forkJoinResult = forkJoin(first, second);
+forkJoinResult.subscribe(val => console.log(val));
+// Output: [3, 6]
