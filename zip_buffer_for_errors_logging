@@ -1,0 +1,50 @@
+https://stackblitz.com/edit/angular-ivy-tti9rp?file=src%2Fapp%2Fapp.component.html
+https://blog.stackademic.com/angular-rxjs-a-real-use-case-which-helped-me-understand-zip-operator-48c9697ab601
+
+export interface EventBatchModel {
+  target: EventTarget;
+  timestamp: number;
+}
+
+@Component({
+  selector: 'my-app',
+  template: '<button>Click Me !</button>
+             <button (click)="createError()">
+               Generate TS error
+             </button>',
+  styleUrls: ['./app.component.css'],
+})
+export class AppComponent {
+  private error$ = new Subject<string>();
+
+  ngOnInit() {
+    const obsv1$ = fromEvent(document, 'click').pipe(
+      scan((acc: EventBatchModel[], curr: Event) => {
+        acc.push({ target: curr.target, timestamp: new Date().getTime() });
+        return acc;
+      }, [])
+    );
+
+    // const obsv1$ = fromEvent(document, 'click').pipe(
+    //   map((event: Event) => {
+    //     return {
+    //       target: event.target,
+    //       timestamp: new Date().getTime(),
+    //     };
+    //   }),
+    //   buffer(this.error$.asObservable())
+    // );
+
+    zip([this.error$.asObservable(), obsv1$]).subscribe((result) => {
+      console.log(result);
+    });
+  }
+
+  createError() {
+    try {
+      let errorMessage: string = 'Some error has occured';
+      this.error$.next(errorMessage);
+      throw new Error(errorMessage);
+    } catch {}
+  }
+}
