@@ -20,3 +20,54 @@ of(1, 2, 3).pipe(
 // [0, 1]
 // [1, 2]
 // [2. 3]
+
+Пример 2. Вывести название полей формы, которые изменились:
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [ReactiveFormsModule],
+  template: `
+    <form [formGroup]="myForm" >
+      <input name="name"  formControlName="name" />
+      <input name="email" formControlName="email" />
+</form>
+  `,
+})
+export class App {
+  name = 'Angular';
+  public myForm = inject(FormBuilder).nonNullable.group({
+    name: '',
+    email: '',
+  });
+
+  constructor() {
+    // track changes in the form
+    this.myForm.valueChanges
+      .pipe(
+        /*takeUntil(this.destroy$),*/
+        // start with the initial form state
+        startWith(this.myForm.value),
+        // get the previous and current form values
+        pairwise(),
+        // get changed fields
+        map(([prev, curr]) => this.getChangedFields(prev, curr)),
+        // filter only distinct field keys
+        scan((acc, curr) => 
+            [...new Set([...acc, ...curr])], [] as string[]
+        )
+      )
+      .subscribe((fieldChange) => {
+        console.log('Changed fields:', fieldChange);
+      });
+  }
+
+  /**
+   * identify which fields have changed between two states.
+   * @returns - name of the field (name, email, age)
+   */
+  private getChangedFields(previous: any, current: any): string[] {
+    return Object.keys(current).filter(
+		(key) => previous[key] !== current[key]
+	);
+  }
+}
