@@ -1,0 +1,40 @@
+https://medium.com/@danpercic86/destroyref-takeuntildestroyed-07133a40b24f
+
+@Component(...)
+export class AlertsTableComponent implements OnInit {
+  /* other services and fields here */
+  ...
+
+  readonly #fetchAlertsOnStatusChange = inject(SignalrService).alarmOccurred$.pipe(
+     log('[ALARMS] Reload table items...'),
+     switchMap(() => this.loadItems()),
+     log('[ALARMS] Table items reloaded!'),
+     takeUntilDestroyed(),
+  );
+
+  readonly #fetchAlertsOnDeviceChange = inject(ClientDevicesService).devicesChanged$.pipe(
+     log('[ALARMS] Reload table items after device added ...'),
+     switchMap(() => this.loadItems()),
+     log('[ALARMS] Table items reloaded after device added!'),
+     takeUntilDestroyed(),
+  );
+
+  constructor() {
+    const fetchPermissionsEvery5Sec$ = interval(5000).pipe(
+       switchMap(() => this._entityPermissionsService.loadFor(this.targetObject)),
+       takeUntilDestroyed(),
+    );
+    
+    fetchPermissionsEvery5Sec$.subscribe();
+  }
+
+  ngOnInit() {
+     this.#fetchAlertsOnStatusChange.subscribe();
+     this.#fetchAlertsOnDeviceChange.subscribe();
+  }
+
+  loadItems() {
+    /* http requests to fetch data here */
+    ...
+  }
+}
