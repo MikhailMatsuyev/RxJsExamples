@@ -1,0 +1,14 @@
+USERS = 'https://jsonplaceholder.typicode.com/users/';
+  POSTS = 'https://jsonplaceholder.typicode.com/posts/';
+  data: [User[], Post[]];
+
+  constructor(http: HttpClient) {
+    const users = http.get<User[]>(this.USERS);
+    const posts = http.get<Post[]>(this.POSTS);
+
+    forkJoin([users, posts])
+      .subscribe(res => {
+        this.data = res;
+        console.log ('User and Post', res);
+      });
+  }
