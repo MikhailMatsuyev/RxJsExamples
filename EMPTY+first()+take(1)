@@ -1,0 +1,14 @@
+import { EMPTY } from 'rxjs';
+
+const empty$ = EMPTY;
+
+empty$.pipe(first()).subscribe(
+  value => console.log(value), // Не сработает
+  err => console.error(err)    // Выведет: EmptyError: no elements in sequence
+);
+
+empty$.pipe(take(1)).subscribe(
+  value => console.log(value), // Не сработает
+  err => console.error(err)    // Не сработает
+  () => console.log('completed') // Выведет: completed (без ошибки)
+);
